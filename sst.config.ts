@@ -66,7 +66,7 @@ export default $config({
     // Run durable object as a wrangler service — SST doesn't support DOs yet unfortunately.
     new sst.x.DevCommand(`wrangler`, {
       dev: {
-        command: `npx wrangler dev --var ELECTRIC_URL:TODO still`,
+        command: `npx wrangler dev --var ELECTRIC_URL:${process.env.ELECTRIC_URL} --var ELECTRIC_SOURCE_ID:${process.env.ELECTRIC_SOURCE_ID} --var ELECTRIC_SOURCE_SECRET:${process.env.ELECTRIC_SOURCE_SECRET}`,
         title: `Wrangler`,
       },
     });

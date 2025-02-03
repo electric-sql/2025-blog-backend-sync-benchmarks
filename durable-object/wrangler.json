@@ -11,7 +11,9 @@
     "enabled": true
   },
   "vars": {
-    "ELECTRIC_URL": "http://localhost:3000"
+    "ELECTRIC_URL": "http://localhost:3000",
+    "ELECTRIC_SOURCE_ID": "local-source",
+    "ELECTRIC_SOURCE_SECRET": "local-secret"
   },
   "durable_objects": {
     "bindings": [
