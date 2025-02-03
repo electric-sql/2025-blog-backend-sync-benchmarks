@@ -11,5 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "sst": "^3.7.2"
+  },
+  "devDependencies": {
+    "camelcase": "^8.0.0"
   }
 }
