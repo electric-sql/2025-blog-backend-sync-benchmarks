@@ -1,4 +1,7 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+
+import { execSync } from "child_process";
+
 export default $config({
   app(input) {
     return {
@@ -46,6 +49,8 @@ export default $config({
     });
 
     // TODO run db migrations here
+    applyMigrations(dbUrl);
+    loadData(dbUrl);
 
     const vpc = new sst.aws.Vpc("vpc");
     const redis = new sst.aws.Redis("redis", { vpc });
@@ -73,3 +78,22 @@ export default $config({
     };
   },
 });
+
+function applyMigrations(uri: string) {
+  console.log(`apply migrations to `, uri);
+  execSync(`npx pg-migrations apply --directory ./db/migrations`, {
+    env: {
+      ...process.env,
+      DATABASE_URL: uri,
+    },
+  });
+}
+
+function loadData(uri: string) {
+  execSync(`pnpm run db:load-data`, {
+    env: {
+      ...process.env,
+      DATABASE_URL: uri,
+    },
+  });
+}
