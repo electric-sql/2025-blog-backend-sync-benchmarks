@@ -5,6 +5,9 @@
 
 declare module "sst" {
   export interface Resource {
+    "examples-infra-shared-examplesInfraVpcShared": {
+      "type": "sst.aws.Vpc"
+    }
     "nodejs": {
       "service": string
       "type": "sst.aws.Service"
@@ -20,9 +23,6 @@ declare module "sst" {
       "port": number
       "type": "sst.aws.Redis"
       "username": string
-    }
-    "vpc": {
-      "type": "sst.aws.Vpc"
     }
   }
 }

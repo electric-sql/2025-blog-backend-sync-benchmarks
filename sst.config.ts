@@ -47,10 +47,10 @@ export default $config({
 
     // TODO run db migrations here
 
-    const vpc = new sst.aws.Vpc("vpc");
+    const vpc = sst.aws.Vpc.get("examples-infra-shared-examplesInfraVpcShared", "vpc-044836d73fc26a218");
     const redis = new sst.aws.Redis("redis", { vpc });
 
-    const cluster = new sst.aws.Cluster("cluster", { vpc });
+    const cluster = sst.aws.Cluster.get("examples-infra-shared-examplesInfraClusterSharedCluster", { vpc, id: `arn:aws:ecs:us-east-1:904233135193:cluster/examples-infra-shared-examplesInfraClusterSharedCluster` });
 
     // TODO create a durable object as a wrangler service — SST doesn't support DOs yet unfortunately.
 
