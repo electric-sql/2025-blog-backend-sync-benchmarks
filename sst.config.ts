@@ -100,10 +100,6 @@ function loadData(uri: string) {
       },
     });
   } catch (err) {
-<<<<<<< Updated upstream
     console.error("loading data failed");
-=======
->>>>>>> Stashed changes
-    console.error(err);
   }
 }
