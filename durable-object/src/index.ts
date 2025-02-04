@@ -40,35 +40,41 @@ export class ElectricSqliteDemo extends DurableObject {
     this.sql.exec(`CREATE TABLE IF NOT EXISTS shape_sync_metadata (
   shape_name TEXT UNIQUE,
   offset TEXT,
-  shape_id TEXT
+  shape_handle TEXT
 );`);
   }
 
   /*
    * Sync all users from Electric & then return info for specific user
    */
-  async getUserInfo(id: string): Promise<string> {
+  async getUserInfo(
+    id: string,
+    electricUrl: string,
+    sourceId: string,
+    sourceSecret: string,
+  ): Promise<string> {
     const USER_SHAPE = `user_shape`;
 
     // Get shape info
     const shapeMetadata = this.sql
-      .exec(`SELECT * FROM shape_sync_metadata where shape_id;`)
+      .exec(`SELECT * FROM shape_sync_metadata where shape_handle;`)
       .toArray();
 
     const userStreamMetadata =
       shapeMetadata.find((s) => s.shape_name === USER_SHAPE) || {};
 
-    let userLastOffset = (userStreamMetadata?.offset || -1) as Offset;
-    let userShapeId = userStreamMetadata?.shape_id as string | undefined;
+    let userLastOffset = (userStreamMetadata?.offset) as Offset;
+    let userHandle = userStreamMetadata?.shape_handle as string | undefined;
+    console.log({userLastOffset, userHandle})
 
     const userStream = new ShapeStream({
-      url: `${env.ELECTRIC_URL}/v1/shape/users`,
+      url: `${electricUrl}/v1/shape/users`,
       subscribe: false,
-      handle: userShapeId,
+      handle: userHandle,
       offset: userLastOffset,
       params: {
-        source_id: env.ELECTRIC_SOURCE_ID,
-        source_secret: env.ELECTRIC_SOURCE_SECRET,
+        source_id: sourceId,
+        source_secret: sourceSecret,
       },
     });
 
@@ -121,7 +127,7 @@ export class ElectricSqliteDemo extends DurableObject {
           }
         }
       }
-      userShapeId = userStream.shapeId;
+      userHandle = userStream.shapeHandle;
     });
 
     const userShape = new Shape(userStream);
@@ -134,8 +140,8 @@ export class ElectricSqliteDemo extends DurableObject {
 
     // Upsert shape metadata
     this.sql.exec(`
-INSERT OR REPLACE INTO shape_sync_metadata (shape_name, offset, shape_id)
-VALUES ('${USER_SHAPE}', '${userLastOffset}', '${userShapeId}');
+INSERT OR REPLACE INTO shape_sync_metadata (shape_name, offset, shape_handle)
+VALUES ('${USER_SHAPE}', '${userLastOffset}', '${userHandle}');
 `);
 
     // Get specific user
@@ -164,7 +170,12 @@ export default {
       id,
     ) as DurableObjectStub<ElectricSqliteDemo>;
 
-    const response = await stub.getUserInfo(matches.params.id);
+    const response = await stub.getUserInfo(
+      matches.params.id,
+      env.ELECTRIC_URL,
+      env.ELECTRIC_SOURCE_ID,
+      env.ELECTRIC_SOURCE_SECRET,
+    );
 
     return new Response(response);
   },

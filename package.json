@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sst": "^3.7.2"
+    "sst": "3.6.29"
   },
   "devDependencies": {
     "@databases/pg-migrations": "^5.0.3",

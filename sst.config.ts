@@ -63,21 +63,13 @@ export default $config({
       },
     );
 
-    // Run durable object as a wrangler service — SST doesn't support DOs yet unfortunately.
-    new sst.x.DevCommand(`wrangler`, {
-      dev: {
-        command: `npx wrangler dev --var ELECTRIC_URL:${process.env.ELECTRIC_URL} --var ELECTRIC_SOURCE_ID:${process.env.ELECTRIC_SOURCE_ID} --var ELECTRIC_SOURCE_SECRET:${process.env.ELECTRIC_SOURCE_SECRET}`,
-        title: `Wrangler`,
-      },
-    });
-
     const nodejs = cluster.addService("nodejs", {
       loadBalancer: {
         ports: [{ listen: "80/http" }],
       },
       link: [postgres, redis],
       dev: {
-        command: `npx tsx nodejs/index.ts`,
+        command: `npx tsx ./node/index.ts`,
         url: `http://localhost:4005`,
       },
       // TODO add dockerfile in the nodejs folder
