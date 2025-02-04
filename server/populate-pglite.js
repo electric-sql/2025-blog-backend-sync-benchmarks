@@ -17,12 +17,6 @@ async function makeInsertQuery(db, data) {
 //generate users//
 export async function populate(db) {
   //run pglite queries
-  //const db = new PGlite();
-
-  //console.log("Waiting for db to be ready");
-  //await db.waitReady;
-
-  //console.log("Creating table...");
   await db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id uuid PRIMARY KEY,

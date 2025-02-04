@@ -1,6 +1,7 @@
 import { PGlite } from "@electric-sql/pglite";
 import Fastify from "fastify";
 import { populate } from "./populate-pglite.js";
+import validate from "uuid-validate";
 
 const fastify = Fastify({
   logger: true,
@@ -26,6 +27,11 @@ fastify.get("/users", async (_req, reply) => {
 
 fastify.get("/users/:userId", async (req, reply) => {
   const { userId } = req.params;
+
+  //check if valid uuid
+  if (!validate(userId)) {
+    reply.send(`The id provided ${userId} is not a valid UUID`);
+  }
   //query pglite in here
   const res = await db.exec(
     `
@@ -33,7 +39,7 @@ fastify.get("/users/:userId", async (req, reply) => {
   `,
   );
   const rows = res[0].rows;
-  console.log(rows);
+
   if (rows.length == 0) {
     reply.send("User doesnt exist");
   } else {
