@@ -1,6 +1,6 @@
 import { generateUsers } from "../db/generate-data.js";
 
-const USERS_TO_LOAD = 10;
+const USERS_TO_LOAD = 1000000;
 
 async function makeInsertQuery(db, data) {
   const columns = Object.keys(data);

@@ -15,7 +15,6 @@ await db.waitReady;
 await populate(db);
 
 fastify.get("/users", async (_req, reply) => {
-  //query pglite in here
   const res = await db.exec(
     `
       SELECT * FROM users;
@@ -32,7 +31,6 @@ fastify.get("/users/:userId", async (req, reply) => {
   if (!validate(userId)) {
     reply.send(`The id provided ${userId} is not a valid UUID`);
   }
-  //query pglite in here
   const res = await db.exec(
     `
     SELECT * from users WHERE id = '${userId}'
