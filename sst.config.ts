@@ -1,4 +1,7 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+
+import { execSync } from "node:child_process";
+
 export default $config({
   app(input) {
     return {
@@ -15,7 +18,7 @@ export default $config({
     };
   },
   async run() {
-    const { getNeonConnectionString, createNeonDb } = await import('./neon');
+    const { getNeonConnectionString, createNeonDb } = await import("./neon");
     // Create a db in Neon
     const project = neon.getProjectOutput({ id: `square-flower-52864146` });
     const dbName = `user_benchmark_${$app.stage.replace(/-/g, `_`)}`;
@@ -46,6 +49,10 @@ export default $config({
     });
 
     // TODO run db migrations here
+    dbUrl.apply((url) => {
+      applyMigrations(url);
+      loadData(url);
+    });
 
     const vpc = sst.aws.Vpc.get("examples-infra-shared-examplesInfraVpcShared", "vpc-044836d73fc26a218");
     const redis = new sst.aws.Redis("redis", { vpc });
@@ -73,3 +80,26 @@ export default $config({
     };
   },
 });
+
+function applyMigrations(uri: string) {
+  console.log(`apply migrations to `, uri);
+  execSync(`npx pg-migrations apply --directory ./db/migrations`, {
+    env: {
+      ...process.env,
+      DATABASE_URL: uri,
+    },
+  });
+}
+
+function loadData(uri: string) {
+  try {
+    execSync(`pnpm run db:load-data`, {
+      env: {
+        ...process.env,
+        DATABASE_URL: uri,
+      },
+    });
+  } catch (err) {
+    console.error("loading data failed");
+  }
+}

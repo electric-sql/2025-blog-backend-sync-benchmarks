@@ -4,15 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:load-data": "dotenv -e .env -- node ./db/load-data.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sst": "^3.7.2"
+    "dotenv": "^16.4.7",
+    "sst": "^3.7.2",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
-    "camelcase": "^8.0.0"
+    "@databases/pg": "^5.5.0",
+    "@databases/pg-migrations": "^5.0.3",
+    "@faker-js/faker": "^9.4.0",
+    "@types/pg": "^8.11.11",
+    "@types/uuid": "^10.0.0",
+    "camelcase": "^8.0.0",
+    "dotenv-cli": "^8.0.0"
   }
 }
