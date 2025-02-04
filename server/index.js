@@ -24,10 +24,21 @@ fastify.get("/users", async (_req, reply) => {
   reply.send(JSON.stringify(rows));
 });
 
-fastify.get("/users/:userId", (req, reply) => {
+fastify.get("/users/:userId", async (req, reply) => {
   const { userId } = req.params;
   //query pglite in here
-  reply.send(`Identifying user as ${userId}`);
+  const res = await db.exec(
+    `
+    SELECT * from users WHERE id = '${userId}'
+  `,
+  );
+  const rows = res[0].rows;
+  console.log(rows);
+  if (rows.length == 0) {
+    reply.send("User doesnt exist");
+  } else {
+    reply.send(JSON.stringify(rows));
+  }
 });
 
 fastify.listen({ port: 3000 }, (err, _add) => {
