@@ -65,14 +65,14 @@ export class ElectricSqliteDemo extends DurableObject {
 
     let userLastOffset = (userStreamMetadata?.offset) as Offset;
     let userHandle = userStreamMetadata?.shape_handle as string | undefined;
-    console.log({userLastOffset, userHandle})
 
     const userStream = new ShapeStream({
-      url: `${electricUrl}/v1/shape/users`,
+      url: `${electricUrl}/v1/shape`,
       subscribe: false,
       handle: userHandle,
       offset: userLastOffset,
       params: {
+        table: `users`,
         source_id: sourceId,
         source_secret: sourceSecret,
       },
@@ -84,45 +84,47 @@ export class ElectricSqliteDemo extends DurableObject {
           userLastOffset = message.offset;
           if (message.headers.operation === `insert`) {
             this.sql.exec(
-              `
-  INSERT INTO users (
-    id, email, password_hash, first_name, last_name, 
-    phone, email_verified, two_factor_enabled, last_login_at,
-    failed_login_attempts, status, created_at, updated_at
-  )
-  VALUES (
-    '${message.value.id}', '${message.value.email}', '${message.value.password_hash}',
-    '${message.value.first_name}', '${message.value.last_name}', '${message.value.phone}',
-    ${message.value.email_verified ? 1 : 0}, ${message.value.two_factor_enabled ? 1 : 0},
-    '${message.value.last_login_at}', ${message.value.failed_login_attempts},
-    '${message.value.status}', '${message.value.created_at}', '${message.value.updated_at}'
-  )
-`,
+              `INSERT INTO users (
+                id, email, password_hash, first_name, last_name, 
+                phone, email_verified, two_factor_enabled, last_login_at,
+                failed_login_attempts, status, created_at, updated_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              message.value.id,
+              message.value.email,
+              message.value.password_hash,
+              message.value.first_name,
+              message.value.last_name,
+              message.value.phone,
+              message.value.email_verified ? 1 : 0,
+              message.value.two_factor_enabled ? 1 : 0,
+              message.value.last_login_at,
+              message.value.failed_login_attempts,
+              message.value.status,
+              message.value.created_at,
+              message.value.updated_at
             );
           } else if (message.headers.operation === `update`) {
-            // Build the SET clause from the patch object
-            const setClause = Object.entries(message.value)
-              .map(([key, value]) => {
-                if (key === "email_verified" || key === "two_factor_enabled") {
-                  return `${key} = ${value ? 1 : 0}`;
-                }
-                return `${key} = '${value}'`;
-              })
-              .join(", ");
+            // Build the SET clause dynamically but safely
+            const updateColumns = [];
+            const updateValues = [];
+            for (const [key, value] of Object.entries(message.value)) {
+              if (key === 'id') continue; // Skip the id as it's used in WHERE clause
+              updateColumns.push(`${key} = ?`);
+              updateValues.push(key === "email_verified" || key === "two_factor_enabled" ? 
+                (value ? 1 : 0) : value);
+            }
+            updateValues.push(message.value.id); // Add id for WHERE clause
 
             this.sql.exec(
-              `
-  UPDATE users 
-  SET ${setClause}
-  WHERE id = '${message.value.id}'
-`,
+              `UPDATE users 
+               SET ${updateColumns.join(', ')}
+               WHERE id = ?`,
+              ...updateValues
             );
           } else if (message.headers.operation === `delete`) {
             this.sql.exec(
-              `
-  DELETE FROM users
-  WHERE id = '${message.value.id}'
-`,
+              `DELETE FROM users WHERE id = ?`,
+              message.value.id
             );
           }
         }
@@ -149,7 +151,7 @@ VALUES ('${USER_SHAPE}', '${userLastOffset}', '${userHandle}');
       .exec(`SELECT * from users WHERE id = '${id}';`)
       .toArray();
 
-    return JSON.stringify({ users }, null, 4);
+    return JSON.stringify({ user: users[0] }, null, 4);
   }
 }
 

@@ -8,22 +8,40 @@ importers:
 
   .:
     dependencies:
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
+      postgres:
+        specifier: ^3.4.5
+        version: 3.4.5
       sst:
-        specifier: 3.6.29
-        version: 3.6.29
+        specifier: ^3.7.2
+        version: 3.7.7
+      uuid:
+        specifier: ^11.0.5
+        version: 11.0.5
     devDependencies:
+      '@databases/pg':
+        specifier: ^5.5.0
+        version: 5.5.0
       '@databases/pg-migrations':
         specifier: ^5.0.3
         version: 5.0.3
       '@faker-js/faker':
         specifier: ^9.4.0
         version: 9.4.0
+      '@types/pg':
+        specifier: ^8.11.11
+        version: 8.11.11
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
       camelcase:
         specifier: ^8.0.0
         version: 8.0.0
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
+      dotenv-cli:
+        specifier: ^8.0.0
+        version: 8.0.0
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -267,6 +285,15 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
+  '@types/node@22.13.1':
+    resolution: {integrity: sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==}
+
+  '@types/pg@8.11.11':
+    resolution: {integrity: sha512-kGT1qKM8wJQ5qlawUrEkXgvMSXoV213KfMGXcwfDwUIfUHXqXYXOfS1nE1LINRJVVVx5wCm70XnFlMHaIcQAfw==}
+
+  '@types/uuid@10.0.0':
+    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
+
   ansi-escapes@4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
     engines: {node: '>=8'}
@@ -403,6 +430,18 @@ packages:
   define-properties@1.2.1:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
     engines: {node: '>= 0.4'}
+
+  dotenv-cli@8.0.0:
+    resolution: {integrity: sha512-aLqYbK7xKOiTMIRf1lDPbI+Y+Ip/wo5k3eyp6ePysVaSqbyxjyK3dK35BTxG+rmd7djf5q2UPs4noPNH+cj0Qw==}
+    hasBin: true
+
+  dotenv-expand@10.0.0:
+    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+    engines: {node: '>=12'}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -662,6 +701,9 @@ packages:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  minimist@1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -696,6 +738,9 @@ packages:
   object.assign@4.1.7:
     resolution: {integrity: sha512-nK28WOo+QIjBkDduTINE4JkF/UJJKyf2EJxvJKfblDpyg0Q+pkOHNTL0Qwy6NP6FhE/EnzV73BxxqcJaXY9anw==}
     engines: {node: '>= 0.4'}
+
+  obuf@1.1.2:
+    resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
 
   oidc-token-hash@5.0.3:
     resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}
@@ -757,6 +802,10 @@ packages:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
 
+  pg-numeric@1.0.2:
+    resolution: {integrity: sha512-BM/Thnrw5jm2kKLE5uJkXqqExRUY/toLHda65XgFTBTFYZyopbKjBe29Ii3RbkvlsMoFwD+tHeGaCjjv0gHlyw==}
+    engines: {node: '>=4'}
+
   pg-pool@3.7.0:
     resolution: {integrity: sha512-ZOBQForurqh4zZWjrgSwwAtzJ7QiRX0ovFkZr2klsen3Nm0aoh33Ls0fzfv3imeH/nw/O27cjdz5kzYJfeGp/g==}
     peerDependencies:
@@ -768,6 +817,10 @@ packages:
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
     engines: {node: '>=4'}
+
+  pg-types@4.0.2:
+    resolution: {integrity: sha512-cRL3JpS3lKMGsKaWndugWQoLOCoP+Cic8oseVcbr0qhPzYD5DWXK+RZ9LY9wxRf7RQia4SCwQlXk0q6FCPrVng==}
+    engines: {node: '>=10'}
 
   pg@8.13.1:
     resolution: {integrity: sha512-OUir1A0rPNZlX//c7ksiu7crsGZTKSOXJPgtNiHGIlC9H0lO+NC6ZDYksSgBYY/thSWhnSRBv8w1lieNNGATNQ==}
@@ -796,17 +849,36 @@ packages:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
     engines: {node: '>=4'}
 
+  postgres-array@3.0.2:
+    resolution: {integrity: sha512-6faShkdFugNQCLwucjPcY5ARoW1SlbnrZjmGl0IrrqewpvxvhSLHimCVzqeuULCbG0fQv7Dtk1yDbG3xv7Veog==}
+    engines: {node: '>=12'}
+
   postgres-bytea@1.0.0:
     resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
     engines: {node: '>=0.10.0'}
+
+  postgres-bytea@3.0.0:
+    resolution: {integrity: sha512-CNd4jim9RFPkObHSjVHlVrxoVQXz7quwNFpz7RY1okNNme49+sVyiTvTRobiLV548Hx/hb1BG+iE7h9493WzFw==}
+    engines: {node: '>= 6'}
 
   postgres-date@1.0.7:
     resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
     engines: {node: '>=0.10.0'}
 
+  postgres-date@2.1.0:
+    resolution: {integrity: sha512-K7Juri8gtgXVcDfZttFKVmhglp7epKb1K4pgrkLxehjqkrgPhfG6OO8LHLkfaqkbpjNRnra018XwAr1yQFWGcA==}
+    engines: {node: '>=12'}
+
   postgres-interval@1.2.0:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
+
+  postgres-interval@3.0.0:
+    resolution: {integrity: sha512-BSNDnbyZCXSxgA+1f5UU2GmwhoI0aU5yMxRGO8CdFEcY2BQF9xm/7MqKnYoM1nJDk8nONNWDk9WeSmePFhQdlw==}
+    engines: {node: '>=12'}
+
+  postgres-range@1.1.4:
+    resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
 
   postgres@3.4.5:
     resolution: {integrity: sha512-cDWgoah1Gez9rN3H4165peY9qfpEo+SA61oQv65O3cRUE1pOEoJWwddwcqKE8XZYjbblOJlYDlLV4h67HrEVDg==}
@@ -896,33 +968,33 @@ packages:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
 
-  sst-darwin-arm64@3.6.29:
-    resolution: {integrity: sha512-WPLJ+y1kx37NAqTiK2lNG9us5vFXo0DitOkAd5lZcLBdRZDQMMG1CfwZee/OiowQ/WN+wT+xH9e8mqhpqL/JaQ==}
+  sst-darwin-arm64@3.7.7:
+    resolution: {integrity: sha512-G9GCF5YLVnJZdehr1S/7c4L177ZJEtU1ChpV6Aub2XswTQaM7BcDHlorWFK/Dcxko2FA3FuZZB+gfd/ZVLTYeA==}
     cpu: [arm64]
     os: [darwin]
 
-  sst-darwin-x64@3.6.29:
-    resolution: {integrity: sha512-ZOkdR0kq96clC1gX9cGug39tfJlO2eSG9ktsOENNafAIfRGlkX2iGa7UYLJidlwHh+LUgxAZRq3JAmMCDkvVqw==}
+  sst-darwin-x64@3.7.7:
+    resolution: {integrity: sha512-r6dZgPwMtuR/qErSc09trQ9EJHF1InY0EL6tSPcBEnuc4c+d7z/QF2ps62tFgzUsSbqmKX63jB29JKg0eq5NEA==}
     cpu: [x64]
     os: [darwin]
 
-  sst-linux-arm64@3.6.29:
-    resolution: {integrity: sha512-xp3lCaL6WEkfsFtM19MTj6sKckUYuTnBAyBiUyM8H8ocijaUDMdfjL4bL1IGVfSfDeWPcRYh1aqijmmLpq+56w==}
+  sst-linux-arm64@3.7.7:
+    resolution: {integrity: sha512-CSlfoUQjuxlR+mfBpjTl6VlKXspN1zCGqUqw27sbzrXg/U0wYRlf2jhfKVoNOQbWiZaDPVLafOhVCodNpT/3GQ==}
     cpu: [arm64]
     os: [linux]
 
-  sst-linux-x64@3.6.29:
-    resolution: {integrity: sha512-YZ4IQ/BBOp+JIUGgm0SyBnd41mafDy5p0wayZAAxc113xdR7gsDm7dUnc1WYh37g5YhDUjnCaCe0W9e8V0Qp2g==}
+  sst-linux-x64@3.7.7:
+    resolution: {integrity: sha512-/3Ktm48orrI3PahT4wxkA5e9o53RdgoA9U5bVRKa+B9nxROr4YYRpdjZ21ayidDTmI8BhGR7ENRx4Nj40ENuJA==}
     cpu: [x64]
     os: [linux]
 
-  sst-linux-x86@3.6.29:
-    resolution: {integrity: sha512-dhGr8QmrTpsTGYmZABlo97qU2p2KCB9YwVHbsFYW0iwIrBmAk0V8BPIaU2m0+N7U0TSdubu+UZW0/d6Ar8P2Lw==}
+  sst-linux-x86@3.7.7:
+    resolution: {integrity: sha512-CaWa6dUQuwwTliy8O3Ld/3lSRwqr+VLkkaVgfWEf7Jb4NHQ7WB/Xsq960zPoi7lk8x8bAhjyAvhQvEMOz0IFdg==}
     cpu: [x86]
     os: [linux]
 
-  sst@3.6.29:
-    resolution: {integrity: sha512-Inx0hAW8i4smn8TSfgk8qqVIKU1khZSSBhSZV5C500KNV1zcKCb59qFnXah8xJzlv1HuVYIS+HoX1PZu+x8wEw==}
+  sst@3.7.7:
+    resolution: {integrity: sha512-olCJHSgCp0S5mB3bBrpA2Ha+4IIBmWjhxFY/cCCNSNwTAiqPJNhfAWejg4nZqQGRRWa8hiCXvofByb2yhOkh6Q==}
     hasBin: true
 
   stop-iteration-iterator@1.1.0:
@@ -983,8 +1055,15 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  uuid@11.0.5:
+    resolution: {integrity: sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==}
+    hasBin: true
 
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
@@ -1237,6 +1316,18 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
+  '@types/node@22.13.1':
+    dependencies:
+      undici-types: 6.20.0
+
+  '@types/pg@8.11.11':
+    dependencies:
+      '@types/node': 22.13.1
+      pg-protocol: 1.7.0
+      pg-types: 4.0.2
+
+  '@types/uuid@10.0.0': {}
+
   ansi-escapes@4.3.2:
     dependencies:
       type-fest: 0.21.3
@@ -1382,6 +1473,17 @@ snapshots:
       define-data-property: 1.1.4
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
+
+  dotenv-cli@8.0.0:
+    dependencies:
+      cross-spawn: 7.0.6
+      dotenv: 16.4.7
+      dotenv-expand: 10.0.0
+      minimist: 1.2.8
+
+  dotenv-expand@10.0.0: {}
+
+  dotenv@16.4.7: {}
 
   dunder-proto@1.0.1:
     dependencies:
@@ -1677,6 +1779,8 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
+  minimist@1.2.8: {}
+
   minipass@7.1.2: {}
 
   mute-stream@1.0.0: {}
@@ -1708,6 +1812,8 @@ snapshots:
       es-object-atoms: 1.1.1
       has-symbols: 1.1.0
       object-keys: 1.1.1
+
+  obuf@1.1.2: {}
 
   oidc-token-hash@5.0.3: {}
 
@@ -1771,6 +1877,8 @@ snapshots:
 
   pg-int8@1.0.1: {}
 
+  pg-numeric@1.0.2: {}
+
   pg-pool@3.7.0(pg@8.13.1):
     dependencies:
       pg: 8.13.1
@@ -1784,6 +1892,16 @@ snapshots:
       postgres-bytea: 1.0.0
       postgres-date: 1.0.7
       postgres-interval: 1.2.0
+
+  pg-types@4.0.2:
+    dependencies:
+      pg-int8: 1.0.1
+      pg-numeric: 1.0.2
+      postgres-array: 3.0.2
+      postgres-bytea: 3.0.0
+      postgres-date: 2.1.0
+      postgres-interval: 3.0.0
+      postgres-range: 1.1.4
 
   pg@8.13.1:
     dependencies:
@@ -1807,13 +1925,25 @@ snapshots:
 
   postgres-array@2.0.0: {}
 
+  postgres-array@3.0.2: {}
+
   postgres-bytea@1.0.0: {}
 
+  postgres-bytea@3.0.0:
+    dependencies:
+      obuf: 1.1.2
+
   postgres-date@1.0.7: {}
+
+  postgres-date@2.1.0: {}
 
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
+
+  postgres-interval@3.0.0: {}
+
+  postgres-range@1.1.4: {}
 
   postgres@3.4.5: {}
 
@@ -1915,32 +2045,32 @@ snapshots:
 
   split2@4.2.0: {}
 
-  sst-darwin-arm64@3.6.29:
+  sst-darwin-arm64@3.7.7:
     optional: true
 
-  sst-darwin-x64@3.6.29:
+  sst-darwin-x64@3.7.7:
     optional: true
 
-  sst-linux-arm64@3.6.29:
+  sst-linux-arm64@3.7.7:
     optional: true
 
-  sst-linux-x64@3.6.29:
+  sst-linux-x64@3.7.7:
     optional: true
 
-  sst-linux-x86@3.6.29:
+  sst-linux-x86@3.7.7:
     optional: true
 
-  sst@3.6.29:
+  sst@3.7.7:
     dependencies:
       aws4fetch: 1.0.20
       jose: 5.2.3
       openid-client: 5.6.4
     optionalDependencies:
-      sst-darwin-arm64: 3.6.29
-      sst-darwin-x64: 3.6.29
-      sst-linux-arm64: 3.6.29
-      sst-linux-x64: 3.6.29
-      sst-linux-x86: 3.6.29
+      sst-darwin-arm64: 3.7.7
+      sst-darwin-x64: 3.7.7
+      sst-linux-arm64: 3.7.7
+      sst-linux-x64: 3.7.7
+      sst-linux-x86: 3.7.7
 
   stop-iteration-iterator@1.1.0:
     dependencies:
@@ -2010,7 +2140,11 @@ snapshots:
 
   type-fest@0.21.3: {}
 
+  undici-types@6.20.0: {}
+
   util-deprecate@1.0.2: {}
+
+  uuid@11.0.5: {}
 
   wcwidth@1.0.1:
     dependencies:
