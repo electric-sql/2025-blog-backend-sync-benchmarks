@@ -1,8 +1,6 @@
-import { PGlite } from "@electric-sql/pglite";
-
 import { generateUsers } from "../db/generate-data.js";
 
-const USERS_TO_LOAD = 1000000;
+const USERS_TO_LOAD = 10;
 
 async function makeInsertQuery(db, data) {
   const columns = Object.keys(data);
@@ -16,14 +14,16 @@ async function makeInsertQuery(db, data) {
   return await db.exec(sql);
 }
 
-//run pglite queries
-const db = new PGlite();
+//generate users//
+export async function populate(db) {
+  //run pglite queries
+  //const db = new PGlite();
 
-console.log("Waiting for db to be ready");
-await db.waitReady;
+  //console.log("Waiting for db to be ready");
+  //await db.waitReady;
 
-console.log("Creating table...");
-await db.exec(`
+  //console.log("Creating table...");
+  await db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id uuid PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
@@ -41,29 +41,23 @@ await db.exec(`
   )
 `);
 
-//generate users//
-const users = generateUsers(USERS_TO_LOAD);
-const userCount = users.length;
-const batchSize = 100;
-for (let i = 0; i < userCount; i += batchSize) {
-  db.exec(`SET CONSTRAINTS ALL DEFERRED;`); // disable FK checks
+  const users = generateUsers(USERS_TO_LOAD);
+  const userCount = users.length;
+  const batchSize = 100;
+  for (let i = 0; i < userCount; i += batchSize) {
+    db.exec(`SET CONSTRAINTS ALL DEFERRED;`); // disable FK checks
 
-  const batch = users.slice(i, i + batchSize);
-  const promises = batch.map(async (user, index) => {
-    if ((i + index + 1) % 100 === 0 || i + index + 1 === userCount) {
-      process.stdout.write(`Loading user ${i + index + 1} of ${userCount}\r`);
+    const batch = users.slice(i, i + batchSize);
+    const promises = batch.map(async (user, index) => {
+      if ((i + index + 1) % 100 === 0 || i + index + 1 === userCount) {
+        process.stdout.write(`Loading user ${i + index + 1} of ${userCount}\r`);
+      }
+      return await makeInsertQuery(db, user);
+    });
+    try {
+      await Promise.all(promises);
+    } catch (err) {
+      console.error("Batch failed", err);
     }
-    return await makeInsertQuery(db, user);
-  });
-  try {
-    await Promise.all(promises);
-  } catch (err) {
-    console.error("Batch failed", err);
   }
 }
-
-console.log("Selecting data...");
-const res = await db.exec(`
-  SELECT * FROM users;
-`);
-console.log(res);

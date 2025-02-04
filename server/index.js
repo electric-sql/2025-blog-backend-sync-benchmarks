@@ -1,12 +1,27 @@
+import { PGlite } from "@electric-sql/pglite";
 import Fastify from "fastify";
+import { populate } from "./populate-pglite.js";
 
 const fastify = Fastify({
   logger: true,
 });
 
-fastify.get("/users", (_req, reply) => {
+//instantiate pglite
+const db = new PGlite();
+
+console.log("Waiting for db to be ready");
+await db.waitReady;
+await populate(db);
+
+fastify.get("/users", async (_req, reply) => {
   //query pglite in here
-  reply.send("HelloWorld");
+  const res = await db.exec(
+    `
+      SELECT * FROM users;
+    `,
+  );
+  const rows = res[0].rows;
+  reply.send(JSON.stringify(rows));
 });
 
 fastify.get("/users/:userId", (req, reply) => {
