@@ -2,10 +2,9 @@ import { faker } from "@faker-js/faker";
 import { v4 as uuidv4 } from "uuid";
 
 export function generateUsers(numUsers) {
-  const id = uuidv4();
   return Array.from({ length: numUsers }, () => {
     return {
-      id: id,
+      id: uuidv4(),
       email: faker.internet.email(),
       password_hash: faker.internet.password(),
       first_name: faker.person.firstName(),
