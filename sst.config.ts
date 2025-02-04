@@ -1,4 +1,7 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+
+import { execSync } from "node:child_process";
+
 export default $config({
   app(input) {
     return {
@@ -45,9 +48,10 @@ export default $config({
       },
     });
 
-    // TODO run db migrations here
-    //
-    // TODO add db as source to Cloud
+    dbUrl.apply((url) => {
+      applyMigrations(url);
+      loadData(url);
+    });
 
     const vpc = sst.aws.Vpc.get(
       "examples-infra-shared-examplesInfraVpcShared",
@@ -82,3 +86,26 @@ export default $config({
     };
   },
 });
+
+function applyMigrations(uri: string) {
+  console.log(`apply migrations to `, uri);
+  execSync(`npx pg-migrations apply --directory ./db/migrations`, {
+    env: {
+      ...process.env,
+      DATABASE_URL: uri,
+    },
+  });
+}
+
+function loadData(uri: string) {
+  try {
+    execSync(`pnpm run db:load-data`, {
+      env: {
+        ...process.env,
+        DATABASE_URL: uri,
+      },
+    });
+  } catch (err) {
+    console.error("loading data failed");
+  }
+}
