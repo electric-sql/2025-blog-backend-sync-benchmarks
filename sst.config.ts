@@ -1,6 +1,6 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 export default $config({
   app(input) {
@@ -49,8 +49,10 @@ export default $config({
     });
 
     // TODO run db migrations here
-    applyMigrations(dbUrl);
-    loadData(dbUrl);
+    dbUrl.apply((url) => {
+      applyMigrations(url);
+      loadData(url);
+    });
 
     const vpc = new sst.aws.Vpc("vpc");
     const redis = new sst.aws.Redis("redis", { vpc });
@@ -90,10 +92,16 @@ function applyMigrations(uri: string) {
 }
 
 function loadData(uri: string) {
-  execSync(`pnpm run db:load-data`, {
-    env: {
-      ...process.env,
-      DATABASE_URL: uri,
-    },
-  });
+  console.log("something weird is happening");
+  try {
+    execSync(`pnpm run db:load-data`, {
+      env: {
+        ...process.env,
+        DATABASE_URL: uri,
+      },
+    });
+  } catch (err) {
+    console.error("idk why this failed");
+    console.error(err);
+  }
 }
