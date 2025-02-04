@@ -100,7 +100,7 @@ function loadData(uri: string) {
       },
     });
   } catch (err) {
-    console.error("idk why this failed");
+    console.error("loading data failed");
     console.error(err);
   }
 }
