@@ -18,7 +18,7 @@ export default $config({
     };
   },
   async run() {
-    const { getNeonConnectionString, createNeonDb } = await import('./neon');
+    const { getNeonConnectionString, createNeonDb } = await import("./neon");
     // Create a db in Neon
     const project = neon.getProjectOutput({ id: `square-flower-52864146` });
     const dbName = `user_benchmark_${$app.stage.replace(/-/g, `_`)}`;
@@ -100,7 +100,10 @@ function loadData(uri: string) {
       },
     });
   } catch (err) {
+<<<<<<< Updated upstream
     console.error("loading data failed");
+=======
+>>>>>>> Stashed changes
     console.error(err);
   }
 }

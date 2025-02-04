@@ -24,31 +24,39 @@ async function main() {
   }
   console.info(`Connecting to Postgres at ${DATABASE_URL}`);
   const db = createPool(DATABASE_URL);
+  //check number of users currently
+  await db.query(sql`ANALYZE users`);
 
-  const users = generateUsers(USERS_TO_LOAD);
+  const countQuery = sql`SELECT reltuples::bigint AS estimate FROM pg_class where relname = 'users'`;
+  const result = await db.query(countQuery);
+  const currentCount = parseInt(result[0].estimate, 10);
 
-  const userCount = users.length;
-  const batchSize = 100;
-  for (let i = 0; i < userCount; i += batchSize) {
-    await db.tx(async (db) => {
-      db.query(sql`SET CONSTRAINTS ALL DEFERRED;`); // disable FK checks
-      const batch = users.slice(i, i + batchSize);
-      const promises = batch.map(async (user, index) => {
-        if ((i + index + 1) % 100 === 0 || i + index + 1 === userCount) {
-          process.stdout.write(
-            `Loading user ${i + index + 1} of ${userCount}\r`,
-          );
+  if (currentCount < USERS_TO_LOAD) {
+    const users = generateUsers(USERS_TO_LOAD);
+
+    const userCount = users.length;
+    const batchSize = 100;
+    for (let i = 0; i < userCount; i += batchSize) {
+      await db.tx(async (db) => {
+        db.query(sql`SET CONSTRAINTS ALL DEFERRED;`); // disable FK checks
+        const batch = users.slice(i, i + batchSize);
+        const promises = batch.map(async (user, index) => {
+          if ((i + index + 1) % 100 === 0 || i + index + 1 === userCount) {
+            process.stdout.write(
+              `Loading user ${i + index + 1} of ${userCount}\r`,
+            );
+          }
+          return await makeInsertQuery(db, user);
+        });
+        try {
+          await Promise.all(promises);
+        } catch (err) {
+          console.error("Batch failed", err);
         }
-        return await makeInsertQuery(db, user);
       });
-      try {
-        await Promise.all(promises);
-      } catch (err) {
-        console.error("Batch failed", err);
-      }
-    });
+    }
+    process.stdout.write(`\n`);
   }
-  process.stdout.write(`\n`);
 
   db.dispose();
   console.info(`Loaded ${userCount} users.`);
