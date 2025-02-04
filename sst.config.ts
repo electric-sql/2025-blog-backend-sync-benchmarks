@@ -92,7 +92,6 @@ function applyMigrations(uri: string) {
 }
 
 function loadData(uri: string) {
-  console.log("something weird is happening");
   try {
     execSync(`pnpm run db:load-data`, {
       env: {
