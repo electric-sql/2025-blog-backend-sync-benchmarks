@@ -50,7 +50,6 @@ export default $config({
 
     dbUrl.apply((url) => {
       applyMigrations(url);
-      // loadData(url);
     });
 
     const vpc = sst.aws.Vpc.get(
@@ -97,16 +96,3 @@ function applyMigrations(uri: string) {
   });
 }
 
-function loadData(uri: string) {
-  console.log(`loading data into `, uri);
-  try {
-    execSync(`pnpm run db:load-data`, {
-      env: {
-        ...process.env,
-        DATABASE_URL: uri,
-      },
-    });
-  } catch (err) {
-    console.error("loading data failed");
-  }
-}
