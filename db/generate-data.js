@@ -5,10 +5,12 @@ export function generateUsers(numUsers) {
   return Array.from({ length: numUsers }, () => {
     return {
       id: id,
-      first_name: faker.person.FirstName,
-      last_name: faker.person.LastName,
-      email: faker.internet.email,
-      role: faker.person.jobTitle,
+      email: faker.internet.email(),
+      password_hash: faker.internet.password(),
+      first_name: faker.person.FirstName(),
+      last_name: faker.person.LastName(),
+      phone: faker.phone.number(),
+      last_login: faker.date.past(),
     };
   });
 }
