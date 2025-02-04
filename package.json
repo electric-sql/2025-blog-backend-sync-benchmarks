@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "db:load-data": "dotenv -e .env -- node ./db/load-data.mjs",
+    "db:load-data": "dotenv -e .env -- node ./db/load-data.js",
+    "server": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
