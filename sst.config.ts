@@ -108,7 +108,16 @@ export default $config({
       ],
     });
 
+    //add lambda
+    const node = new sst.aws.Function("FastifyApi", {
+      url: true,
+      link: [electricUrlLink],
+      handler: "server/app.handler",
+    });
+
+
     return {
+      node: node.url,
       dbUrl: postgres.properties.url,
     };
   },
