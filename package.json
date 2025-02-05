@@ -30,6 +30,7 @@
     "@faker-js/faker": "^9.4.0",
     "@types/pg": "^8.11.11",
     "@types/uuid": "^10.0.0",
+    "@types/uuid-validate": "^0.0.3",
     "camelcase": "^8.0.0",
     "dotenv-cli": "^8.0.0",
     "tsx": "^4.19.2"

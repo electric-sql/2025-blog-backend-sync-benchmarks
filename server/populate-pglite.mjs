@@ -1,5 +1,10 @@
 //generate table and sync to electric//
-export async function generateAndSyncToElectric(db) {
+export async function generateAndSyncToElectric(
+  db,
+  electricUrl,
+  sourceId,
+  sourceSecret,
+) {
   await db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id uuid PRIMARY KEY,
@@ -20,11 +25,11 @@ export async function generateAndSyncToElectric(db) {
 
   const shape = await db.electric.syncShapeToTable({
     shape: {
-      url: `${env.ELECTRIC_URL}/v1/shape`,
+      url: `${electricUrl}/v1/shape`,
       params: {
         table: "users",
-        sourceSecret: env.ELECTRIC_SOURCE_SECRET,
-        sourceId: env.ELECTRIC_SOURCE_ID,
+        source_id: sourceId,
+        token: sourceSecret,
       },
     },
     table: "users",
