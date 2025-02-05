@@ -18,6 +18,16 @@ export default $config({
     };
   },
   async run() {
+    // env var checks
+    if (
+      !process.env.ELECTRIC_SOURCE_ID &&
+      !process.env.ELECTRIC_SOURCE_SECRET
+    ) {
+      throw new Error(
+        `ELECTRIC_SOURCE_ID and ELECTRIC_SOURCE_SECRET is not set`,
+      );
+    }
+
     const { getNeonConnectionString, createNeonDb } = await import("./neon");
     // Create a db in Neon
     const project = neon.getProjectOutput({ id: `square-flower-52864146` });

@@ -2,7 +2,7 @@ import { electricSync } from "@electric-sql/pglite-sync";
 import Fastify from "fastify";
 import validate from "uuid-validate";
 
-import { populate } from "./populate-pglite.js";
+import { generateAndSyncToElectric } from "./populate-pglite.js";
 
 const fastify = Fastify({
   logger: true,
@@ -17,7 +17,9 @@ const db = await PGlite.create({
 
 console.log("Waiting for db to be ready");
 await db.waitReady;
-await populate(db);
+
+console.log("Syncing shapes");
+await generateAndSyncToElectric(db);
 
 fastify.get("/users", async (_req, reply) => {
   const res = await db.exec(
@@ -36,10 +38,14 @@ fastify.get("/users/:userId", async (req, reply) => {
   if (!validate(userId)) {
     reply.send(`The id provided ${userId} is not a valid UUID`);
   }
-  const res = await db.exec(
+  const res = await db.live.query(
     `
     SELECT * from users WHERE id = '${userId}'
   `,
+    null,
+    (res) => {
+      JSON.stringify(res.rows, null, 2);
+    },
   );
   const rows = res[0].rows;
 
