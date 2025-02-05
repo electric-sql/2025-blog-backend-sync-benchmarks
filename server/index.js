@@ -1,14 +1,19 @@
-import { PGlite } from "@electric-sql/pglite";
+import { electricSync } from "@electric-sql/pglite-sync";
 import Fastify from "fastify";
-import { populate } from "./populate-pglite.js";
 import validate from "uuid-validate";
+
+import { populate } from "./populate-pglite.js";
 
 const fastify = Fastify({
   logger: true,
 });
 
-//instantiate pglite
-const db = new PGlite();
+//instantiate pglite electric sync
+const db = await PGlite.create({
+  extensions: {
+    electric: electricSync(),
+  },
+});
 
 console.log("Waiting for db to be ready");
 await db.waitReady;
