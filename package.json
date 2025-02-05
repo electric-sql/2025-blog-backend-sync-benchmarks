@@ -11,8 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@electric-sql/client": "1.0.0-beta.3",
     "dotenv": "^16.4.7",
     "postgres": "^3.4.5",
+    "redis": "^4.7.0",
     "sst": "^3.7.2",
     "uuid": "^11.0.5"
   },

@@ -1,7 +1,6 @@
 
 # sst
 .sst
-node
 node_modules
 .env
 .dev.vars
