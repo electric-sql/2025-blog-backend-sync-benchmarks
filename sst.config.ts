@@ -66,6 +66,17 @@ export default $config({
       },
     );
 
+    // const nodejs = cluster.addService("nodejs", {
+    //   loadBalancer: {
+    //     ports: [{ listen: "80/http" }],
+    //   },
+    //   link: [postgres, redis],
+    //   dev: {
+    //     command: `npx tsx ./node/index.ts`,
+    //     url: `http://localhost:4005`,
+    //   },
+    //   // TODO add dockerfile in the nodejs folder
+    // });
     const nodejs = cluster.addService("nodejs", {
       loadBalancer: {
         ports: [{ listen: "80/http" }],
@@ -75,6 +86,9 @@ export default $config({
         command: `npx tsx ./node/index.ts`,
         url: `http://localhost:4005`,
       },
+      image: {
+        dockerfile: `./node/Dockerfile.redis`
+      }
       // TODO add dockerfile in the nodejs folder
     });
 

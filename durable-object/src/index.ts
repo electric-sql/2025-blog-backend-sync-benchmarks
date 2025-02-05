@@ -63,7 +63,7 @@ export class ElectricSqliteDemo extends DurableObject {
     const userStreamMetadata =
       shapeMetadata.find((s) => s.shape_name === USER_SHAPE) || {};
 
-    let userLastOffset = (userStreamMetadata?.offset) as Offset;
+    let userLastOffset = userStreamMetadata?.offset as Offset;
     let userHandle = userStreamMetadata?.shape_handle as string | undefined;
 
     const userStream = new ShapeStream({
@@ -79,9 +79,9 @@ export class ElectricSqliteDemo extends DurableObject {
     });
 
     userStream.subscribe(async (messages) => {
+      console.log(`new messages`)
       for (const message of messages) {
         if (isChangeMessage(message)) {
-          userLastOffset = message.offset;
           if (message.headers.operation === `insert`) {
             this.sql.exec(
               `INSERT INTO users (
@@ -101,35 +101,39 @@ export class ElectricSqliteDemo extends DurableObject {
               message.value.failed_login_attempts,
               message.value.status,
               message.value.created_at,
-              message.value.updated_at
+              message.value.updated_at,
             );
           } else if (message.headers.operation === `update`) {
             // Build the SET clause dynamically but safely
             const updateColumns = [];
             const updateValues = [];
             for (const [key, value] of Object.entries(message.value)) {
-              if (key === 'id') continue; // Skip the id as it's used in WHERE clause
+              if (key === "id") continue; // Skip the id as it's used in WHERE clause
               updateColumns.push(`${key} = ?`);
-              updateValues.push(key === "email_verified" || key === "two_factor_enabled" ? 
-                (value ? 1 : 0) : value);
+              updateValues.push(
+                key === "email_verified" || key === "two_factor_enabled"
+                  ? value
+                    ? 1
+                    : 0
+                  : value,
+              );
             }
             updateValues.push(message.value.id); // Add id for WHERE clause
 
-            this.sql.exec(
-              `UPDATE users 
-               SET ${updateColumns.join(', ')}
+            console.log({ updateColumns, updateValues, message });
+            if (updateColumns.length > 0) {
+              this.sql.exec(
+                `UPDATE users 
+               SET ${updateColumns.join(", ")}
                WHERE id = ?`,
-              ...updateValues
-            );
+                ...updateValues,
+              );
+            }
           } else if (message.headers.operation === `delete`) {
-            this.sql.exec(
-              `DELETE FROM users WHERE id = ?`,
-              message.value.id
-            );
+            this.sql.exec(`DELETE FROM users WHERE id = ?`, message.value.id);
           }
         }
       }
-      userHandle = userStream.shapeHandle;
     });
 
     const userShape = new Shape(userStream);
@@ -139,6 +143,9 @@ export class ElectricSqliteDemo extends DurableObject {
     const endTime = Date.now();
     const elapsedTime = endTime - startTime;
     console.log(`Syncing time: ${elapsedTime} ms`);
+    userLastOffset = userShape.lastOffset
+    userHandle = userShape.handle
+    console.log({ userLastOffset, userHandle });
 
     // Upsert shape metadata
     this.sql.exec(`
@@ -151,7 +158,7 @@ VALUES ('${USER_SHAPE}', '${userLastOffset}', '${userHandle}');
       .exec(`SELECT * from users WHERE id = '${id}';`)
       .toArray();
 
-    return JSON.stringify({ user: users[0] }, null, 4);
+    return JSON.stringify({ users }, null, 4);
   }
 }
 
