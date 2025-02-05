@@ -32,9 +32,9 @@ const fastify = Fastify({
     console.log("Syncing shapes");
     await generateAndSyncToElectric(
       db,
-      Resource.electricUrlLink.url,
-      Resource.electricUrlLink.sourceId,
-      Resource.electricUrlLink.sourceSecret,
+      Resource.electricUrl.url,
+      Resource.electricUrl.sourceId,
+      Resource.electricUrl.sourceSecret,
     );
 
     fastify.get("/users", async (_req, reply) => {
