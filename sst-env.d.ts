@@ -5,6 +5,10 @@
 
 declare module "sst" {
   export interface Resource {
+    "ElectricUrl": {
+      "type": "sst.sst.Linkable"
+      "url": string
+    }
     "examples-infra-shared-examplesInfraVpcShared": {
       "type": "sst.aws.Vpc"
     }
@@ -15,6 +19,9 @@ declare module "sst" {
     "redis-benchmark": {
       "service": string
       "type": "sst.aws.Service"
+    }
+    "vpc": {
+      "type": "sst.aws.Vpc"
     }
   }
 }
