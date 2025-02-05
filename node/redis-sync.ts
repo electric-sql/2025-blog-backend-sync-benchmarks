@@ -1,4 +1,5 @@
 import { createClient } from "redis";
+import postgres from "postgres";
 import { Resource } from "sst";
 import {
   ShapeStream,
@@ -8,6 +9,7 @@ import {
   ControlMessage,
   isControlMessage,
 } from "@electric-sql/client";
+import { Bench } from "tinybench";
 
 function isUpToDateMessage<T extends Row<unknown> = Row>(
   message: Message<T>,
@@ -61,6 +63,7 @@ client.connect().then(async () => {
   });
 
   let totalCommands = 0;
+  let runBenchmarks = false;
   let initialSyncStart = Date.now();
   usersStream.subscribe(async (messages: Message[]) => {
     // Helper function to execute a batch with retries
@@ -120,20 +123,20 @@ client.connect().then(async () => {
       // Upsert/delete
       switch (message.headers.operation) {
         case `delete`:
-          pipeline.hDel(`users`, message.key);
+          pipeline.hDel(`users`, message.value.id);
           break;
 
         case `insert`:
           pipeline.hSet(
             `users`,
-            String(message.key),
+            String(message.value.id),
             JSON.stringify(message.value),
           );
           break;
 
         case `update`: {
           pipeline.evalSha(updateKeyScriptSha1, {
-            keys: [`users`, String(message.key)],
+            keys: [`users`, String(message.value.id)],
             arguments: [JSON.stringify(message.value)],
           });
           break;
@@ -162,9 +165,13 @@ client.connect().then(async () => {
     if (isUpToDateMessage(messages.at(-1))) {
       const duration = Date.now() - initialSyncStart;
 
-      console.log(
-        `Did the initial sync of ${totalCommands} operations into Redis in ${(duration / 1000).toFixed(2)}s for a rate of ${((totalCommands / duration) * 1000).toFixed(2)} operations/second `,
-      );
+      if (!runBenchmarks) {
+        runBenchmarks = true;
+        console.log(
+          `Did the initial sync of ${totalCommands} operations into Redis in ${(duration / 1000).toFixed(2)}s for a rate of ${((totalCommands / duration) * 1000).toFixed(2)} operations/second `,
+        );
+        runIncrementalBenchmark();
+      }
     }
 
     if (counter > 0) {
@@ -181,3 +188,46 @@ client.connect().then(async () => {
     }
   });
 });
+
+async function runIncrementalBenchmark() {
+  console.log("Starting benchmark setup...");
+  const bench = new Bench({ time: 2000 });
+  const sql = postgres(Resource.postgres.url, {
+    max: 10, // Max number of connections
+    idle_timeout: 20, // Idle connection timeout in seconds
+  });
+
+  // Get a random user to update
+  const result = await sql`SELECT id FROM users LIMIT 1`;
+  const userId = result[0].id;
+  console.log(`Selected user ID for testing:`, userId);
+
+  let newName: string;
+
+  bench.add(
+    "sync latency",
+    async () => {
+      await new Promise((resolve) => {
+        const checkInterval = setInterval(async () => {
+          const redisValue = await client.hGet(`users`, String(userId));
+          if (redisValue && JSON.parse(redisValue).first_name === newName) {
+            clearInterval(checkInterval);
+            resolve(true);
+          }
+        }, 0);
+      });
+    },
+    {
+      beforeEach: async () => {
+        newName = `User ${Date.now()}`;
+        await sql`UPDATE users SET first_name = ${newName} WHERE id = ${userId}`;
+      },
+    },
+  );
+
+  console.log("\nStarting benchmark runs...");
+  await bench.run();
+
+  console.log("\nBenchmark Results:");
+  console.table(bench.table());
+}
