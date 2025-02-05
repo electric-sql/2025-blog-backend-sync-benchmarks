@@ -48,18 +48,23 @@ export default $config({
       },
     });
 
-    // TODO run db migrations here
     dbUrl.apply((url) => {
       applyMigrations(url);
-      loadData(url);
     });
 
-    const vpc = sst.aws.Vpc.get("examples-infra-shared-examplesInfraVpcShared", "vpc-044836d73fc26a218");
+    const vpc = sst.aws.Vpc.get(
+      "examples-infra-shared-examplesInfraVpcShared",
+      "vpc-044836d73fc26a218",
+    );
     const redis = new sst.aws.Redis("redis", { vpc });
 
-    const cluster = sst.aws.Cluster.get("examples-infra-shared-examplesInfraClusterSharedCluster", { vpc, id: `arn:aws:ecs:us-east-1:904233135193:cluster/examples-infra-shared-examplesInfraClusterSharedCluster` });
-
-    // TODO create a durable object as a wrangler service — SST doesn't support DOs yet unfortunately.
+    const cluster = sst.aws.Cluster.get(
+      "examples-infra-shared-examplesInfraClusterSharedCluster",
+      {
+        vpc,
+        id: `arn:aws:ecs:us-east-1:904233135193:cluster/examples-infra-shared-examplesInfraClusterSharedCluster`,
+      },
+    );
 
     const nodejs = cluster.addService("nodejs", {
       loadBalancer: {
@@ -67,7 +72,7 @@ export default $config({
       },
       link: [postgres, redis],
       dev: {
-        command: `npx tsx nodejs/index.ts`,
+        command: `npx tsx ./node/index.ts`,
         url: `http://localhost:4005`,
       },
       // TODO add dockerfile in the nodejs folder
@@ -91,15 +96,3 @@ function applyMigrations(uri: string) {
   });
 }
 
-function loadData(uri: string) {
-  try {
-    execSync(`pnpm run db:load-data`, {
-      env: {
-        ...process.env,
-        DATABASE_URL: uri,
-      },
-    });
-  } catch (err) {
-    console.error("loading data failed");
-  }
-}
