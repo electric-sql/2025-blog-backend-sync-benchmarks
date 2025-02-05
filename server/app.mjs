@@ -2,6 +2,8 @@ import { electricSync } from "@electric-sql/pglite-sync";
 import { PGlite } from "@electric-sql/pglite";
 import { live } from "@electric-sql/pglite/live";
 
+import { Resource } from "sst";
+
 import Fastify from "fastify";
 import validate from "uuid-validate";
 
@@ -30,9 +32,9 @@ const fastify = Fastify({
     console.log("Syncing shapes");
     await generateAndSyncToElectric(
       db,
-      process.env.ELECTRIC_URL,
-      process.env.ELECTRIC_SOURCE_ID,
-      process.env.ELECRIC_SOURCE_SECRET,
+      Resource.electricUrlLink.url,
+      Resource.electricUrlLink.sourceId,
+      Resource.electricUrlLink.sourceSecret,
     );
 
     fastify.get("/users", async (_req, reply) => {

@@ -1,6 +1,6 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-import { execSync } from "node:child_process";
+import {execSync} from "node:child_process";
 
 export default $config({
   app(input) {
@@ -19,18 +19,9 @@ export default $config({
   },
   async run() {
     // env var checks
-    if (
-      !process.env.ELECTRIC_SOURCE_ID &&
-      !process.env.ELECTRIC_SOURCE_SECRET
-    ) {
-      throw new Error(
-        `ELECTRIC_SOURCE_ID and ELECTRIC_SOURCE_SECRET is not set`,
-      );
-    }
-
-    const { getNeonConnectionString, createNeonDb } = await import("./neon");
+    const {getNeonConnectionString, createNeonDb} = await import("./neon");
     // Create a db in Neon
-    const project = neon.getProjectOutput({ id: `square-flower-52864146` });
+    const project = neon.getProjectOutput({id: `square-flower-52864146`});
     const dbName = `user_benchmark_${$app.stage.replace(/-/g, `_`)}`;
     const branchId = `br-blue-morning-a4ywuv4l`;
 
@@ -43,7 +34,7 @@ export default $config({
       pooled: false,
     };
 
-    const { dbName: resultingDbName, ownerName } = createNeonDb({
+    const {dbName: resultingDbName, ownerName} = createNeonDb({
       projectId: project.id,
       branchId,
       dbName,
@@ -60,6 +51,14 @@ export default $config({
 
     dbUrl.apply((url) => {
       applyMigrations(url);
+    });
+
+    const electricUrlLink = new sst.Linkable("ElectricUrl", {
+      properties: {
+        url: process.env.ELECTRIC_URL,
+        sourceId: process..env.ELECTRIC_SOURCE_ID,
+        sourceSecret: process..env.ELECTRIC_SOURCE_SECRET,
+      },
     });
 
     const vpc = sst.aws.Vpc.get(
