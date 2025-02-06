@@ -120,7 +120,6 @@ export class ElectricSqliteDemo extends DurableObject {
             }
             updateValues.push(message.value.id); // Add id for WHERE clause
 
-            console.log({ updateColumns, updateValues, message });
             if (updateColumns.length > 0) {
               this.sql.exec(
                 `UPDATE users 
