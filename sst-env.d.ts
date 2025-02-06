@@ -5,32 +5,31 @@
 
 declare module "sst" {
   export interface Resource {
-    ElectricUrl: {
-      sourceId: string;
-      sourceSecret: string;
-      type: "sst.sst.Linkable";
-      url: string;
-    };
+    "ElectricUrl": {
+      "sourceId": string
+      "sourceSecret": string
+      "type": "sst.sst.Linkable"
+      "url": string
+    }
+    "FastifyApi": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
     "examples-infra-shared-examplesInfraVpcShared": {
-      type: "sst.aws.Vpc";
-    };
-    FastifyApi: {
-      name: string;
-      type: "sst.aws.Function";
-      url: string;
-    };
-    postgres: {
-      type: "sst.sst.Linkable";
-      url: string;
-    };
+      "type": "sst.aws.Vpc"
+    }
+    "postgres": {
+      "type": "sst.sst.Linkable"
+      "url": string
+    }
     "redis-benchmark": {
-      service: string;
-      type: "sst.aws.Service";
-    };
+      "service": string
+      "type": "sst.aws.Service"
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />
 
-import "sst";
-export {};
-
+import "sst"
+export {}
