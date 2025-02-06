@@ -29,11 +29,15 @@ export async function generateAndSyncToElectric(
       params: {
         table: "users",
         source_id: sourceId,
-        token: sourceSecret,
+        source_secret: sourceSecret,
       },
     },
     table: "users",
     primaryKey: ["id"],
+    shapeKey: "",
   });
+  console.log(shape.stream.options.params);
+
+  shape.subscribe(console.log, console.log);
   return shape;
 }

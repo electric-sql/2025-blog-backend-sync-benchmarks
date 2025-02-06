@@ -6,8 +6,6 @@
 declare module "sst" {
   export interface Resource {
     "ElectricUrl": {
-      "sourceId": string
-      "sourceSecret": string
       "type": "sst.sst.Linkable"
       "url": string
     }

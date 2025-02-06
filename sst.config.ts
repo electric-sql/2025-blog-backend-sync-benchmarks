@@ -56,8 +56,8 @@ export default $config({
     const electricUrlLink = new sst.Linkable("ElectricUrl", {
       properties: {
         url: process.env.ELECTRIC_URL,
-        sourceId: process..env.ELECTRIC_SOURCE_ID,
-        sourceSecret: process..env.ELECTRIC_SOURCE_SECRET,
+        sourceId: process.env.ELECTRIC_SOURCE_ID,
+        sourceSecret: process.env.ELECTRIC_SOURCE_SECRET,
       },
     });
 
