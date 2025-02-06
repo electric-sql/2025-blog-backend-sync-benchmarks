@@ -71,14 +71,15 @@ async function init() {
         },
       );
     });
-    return fastify;
   } catch (err) {
     console.error(`Failed to create pglite electric sync instance ${err}`);
   }
+  return fastify;
 }
 
 if (require.main === module) {
-  init().listen({ port: PORT }, (err) => {
+  const app = await init();
+  app.listen({ port: PORT }, (err) => {
     if (err) console.error(err);
     console.log("server listening on 3000");
   });
