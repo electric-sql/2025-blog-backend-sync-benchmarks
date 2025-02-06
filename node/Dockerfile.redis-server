@@ -1,0 +1,10 @@
+FROM redis:latest
+
+# Copy redis.conf from the build context
+COPY ./node/redis.conf /usr/local/etc/redis/redis.conf
+
+# Enable memory overcommit
+RUN echo 'vm.overcommit_memory = 1' >> /etc/sysctl.conf
+
+# Use redis.conf as the default config
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]

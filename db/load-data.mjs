@@ -21,7 +21,7 @@ async function main() {
   }
 
   const DATABASE_URL = process.env.DATABASE_URL;
-  const USERS_TO_LOAD = parseInt(process.env.USERS_TO_LOAD, 10) || 1000000;
+  const USERS_TO_LOAD = parseInt(process.env.USERS_TO_LOAD, 10) || 100000;
 
   const sql = postgres(DATABASE_URL, {
     max: 10, // Max number of connections

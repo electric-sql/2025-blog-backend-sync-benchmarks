@@ -11,22 +11,26 @@ import {
 } from "@electric-sql/client";
 import { Bench } from "tinybench";
 
+console.log({ Resource });
+
 function isUpToDateMessage<T extends Row<unknown> = Row>(
   message: Message<T>,
 ): message is ControlMessage & { up_to_date: true } {
   return isControlMessage(message) && message.headers.control === `up-to-date`;
 }
 
-let url: string = ``;
-if (Resource.App.stage !== `production`) {
-  url = `redis://localhost:6379`;
-} else {
-  url = `redis://${Resource.redis.username}:${encodeURIComponent(Resource.redis.password)}@${Resource.redis.host}:${Resource.redis.port}`;
-}
+const url = `redis://localhost:6379`;
 
 // Create a Redis client
 const client = createClient({
   url,
+  socket: {
+    reconnectStrategy: (retries: number) => {
+      // Exponential backoff with max delay of 3s
+      const delay = Math.min(retries * 100, 3000);
+      return delay;
+    },
+  },
 });
 
 client.connect().then(async () => {
@@ -53,6 +57,7 @@ client.connect().then(async () => {
   // Load the script into Redis and get its SHA1 digest
   const updateKeyScriptSha1 = await client.SCRIPT_LOAD(script);
 
+  console.log(`ShapeStream`, process.env.SOURCE_ID)
   const usersStream = new ShapeStream({
     url: `https://api.electric-sql.cloud/v1/shape`,
     params: {
@@ -190,7 +195,7 @@ client.connect().then(async () => {
 });
 
 async function runIncrementalBenchmark() {
-  console.log("Starting benchmark setup...");
+  console.log("Starting benchmark setup");
   const bench = new Bench({ time: 2000 });
   const sql = postgres(Resource.postgres.url, {
     max: 10, // Max number of connections
@@ -199,6 +204,7 @@ async function runIncrementalBenchmark() {
 
   // Get a random user to update
   const result = await sql`SELECT id FROM users LIMIT 1`;
+  console.log({ result });
   const userId = result[0].id;
   console.log(`Selected user ID for testing:`, userId);
 

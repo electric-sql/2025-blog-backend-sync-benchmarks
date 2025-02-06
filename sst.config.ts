@@ -56,7 +56,6 @@ export default $config({
       "examples-infra-shared-examplesInfraVpcShared",
       "vpc-044836d73fc26a218",
     );
-    const redis = new sst.aws.Redis("redis", { vpc });
 
     const cluster = sst.aws.Cluster.get(
       "examples-infra-shared-examplesInfraClusterSharedCluster",
@@ -66,36 +65,42 @@ export default $config({
       },
     );
 
-    // const nodejs = cluster.addService("nodejs", {
-    //   loadBalancer: {
-    //     ports: [{ listen: "80/http" }],
-    //   },
-    //   link: [postgres, redis],
-    //   dev: {
-    //     command: `npx tsx ./node/index.ts`,
-    //     url: `http://localhost:4005`,
-    //   },
-    //   // TODO add dockerfile in the nodejs folder
-    // });
-    const nodejs = cluster.addService("nodejs", {
-      loadBalancer: {
-        ports: [{ listen: "80/http" }],
-      },
-      link: [postgres, redis],
+    const redisBenchmark = cluster.addService("redis-benchmark", {
+      link: [postgres],
       dev: {
         command: `npx tsx ./node/index.ts`,
         url: `http://localhost:4005`,
       },
-      image: {
-        dockerfile: `./node/Dockerfile.redis`
-      }
-      // TODO add dockerfile in the nodejs folder
+      memory: `8 GB`,
+      cpu: `4 vCPU`,
+      containers: [
+        {
+          name: `benchmark-script`,
+          image: {
+            dockerfile: `./node/Dockerfile.redis`,
+          },
+          environment: {
+            SOURCE_ID: process.env.SOURCE_ID,
+            SOURCE_SECRET: process.env.SOURCE_SECRET,
+            NO_COLOR: "1",
+            FORCE_COLOR: "0",
+          },
+          cpu: `2 vCPU`,
+          memory: `4 GB`,
+        },
+        {
+          name: `redis`,
+          image: {
+            dockerfile: `./node/Dockerfile.redis-server`,
+          },
+          cpu: `2 vCPU`,
+          memory: `4 GB`,
+        },
+      ],
     });
 
     return {
-      nodejs: nodejs.url,
       dbUrl: postgres.properties.url,
-      redis: redis.host,
     };
   },
 });
@@ -109,4 +114,3 @@ function applyMigrations(uri: string) {
     },
   });
 }
-
