@@ -54,7 +54,7 @@ try {
   if (!runBenchmarks) {
     runBenchmarks = true;
     console.log(`Did the initial sync in ${(duration / 1000).toFixed(2)}`);
-    runIncrementalBenchmark();
+    runIncrementalBenchmark(db);
   }
 
   fastify.get("/users", async (_req, reply) => {
@@ -90,7 +90,7 @@ fastify.listen({ port: PORT }, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-async function runIncrementalBenchmark() {
+async function runIncrementalBenchmark(db) {
   console.log("Starting benchmark setup");
   const bench = new Bench({ time: 2000 });
   const sql = postgres(process.env.DATABASE_URL, {
@@ -112,12 +112,11 @@ async function runIncrementalBenchmark() {
     async () => {
       await new Promise((resolve) => {
         const checkInterval = setInterval(async () => {
-          //const redisValue = await client.hGet(`users`, String(userId));
-          //query directly?
-          const sqlVal = await sql`SELECT * from users where id = ${userId}`;
-          console.log(sqlVal);
-          console.log("this is a thingggg");
-          if (sqlVal && sqlVal[0].first_name === newName) {
+          const res = await db.exec(
+            `SELECT * from users WHERE id = '5abd3773-678f-45f4-a28f-405f28b00911'`,
+          );
+
+          if (res && res[0].first_name === newName) {
             clearInterval(checkInterval);
             resolve(true);
           }
