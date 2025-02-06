@@ -40,10 +40,6 @@ try {
     process.env.SOURCE_SECRET, //Resource.ElectricUrl.sourceSecret,
   );
 
-  db.live.query(`SELECT * from users`, [], (res) => {
-    console.log(res.rows);
-  });
-
   fastify.get("/users", async (_req, reply) => {
     const res = await db.exec(
       `
