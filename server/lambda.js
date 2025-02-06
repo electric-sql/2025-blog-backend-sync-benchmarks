@@ -1,6 +1,6 @@
 const awsLambdaFastify = require("@fastify/aws-lambda");
-const init = require("./app");
+import { init } from "./app.mjs";
 
 const proxy = awsLambdaFastify(init());
 
-exports.handler = proxy;
+export { proxy as handler };
