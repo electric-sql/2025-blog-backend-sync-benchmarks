@@ -77,7 +77,7 @@ export default $config({
     const redisBenchmark = cluster.addService("redis-benchmark", {
       link: [postgres],
       dev: {
-        command: `node server/app.mjs`,
+        command: `npx tsx ./node/index.ts`,
         url: `http://localhost:4005`,
       },
       memory: `8 GB`,
