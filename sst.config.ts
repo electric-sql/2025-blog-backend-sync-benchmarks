@@ -112,7 +112,9 @@ export default $config({
     const node = new sst.aws.Function("FastifyApi", {
       url: true,
       link: [electricUrlLink],
-      handler: "server/app.handler",
+      handler: "server/lambda.handler",
+      timeout: "3 minutes",
+      memory: "1024 MB",
     });
 
 
