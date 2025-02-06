@@ -43,7 +43,6 @@ async function init() {
       `,
         null,
         (res) => {
-          console.log(res);
           reply.send(JSON.stringify(res.rows, null, 2));
         },
       );
@@ -66,7 +65,7 @@ async function init() {
           if (res.rows.length == 0) {
             reply.send("User doesnt exist");
           } else {
-            JSON.stringify(res.rows, null, 2);
+            reply.send(JSON.stringify(res.rows, null, 2));
           }
         },
       );
