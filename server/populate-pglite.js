@@ -36,8 +36,6 @@ export async function generateAndSyncToElectric(
     primaryKey: ["id"],
     shapeKey: "",
   });
-  console.log(shape.stream.options.params);
 
-  shape.subscribe(console.log, console.log);
   return shape;
 }
