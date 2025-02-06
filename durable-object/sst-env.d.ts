@@ -9,21 +9,13 @@ declare module "sst" {
     "examples-infra-shared-examplesInfraVpcShared": {
       "type": "sst.aws.Vpc"
     }
-    "nodejs": {
-      "service": string
-      "type": "sst.aws.Service"
-      "url": string
-    }
     "postgres": {
       "type": "sst.sst.Linkable"
       "url": string
     }
-    "redis": {
-      "host": string
-      "password": string
-      "port": number
-      "type": "sst.aws.Redis"
-      "username": string
+    "redis-benchmark": {
+      "service": string
+      "type": "sst.aws.Service"
     }
   }
 }
