@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db:load-data": "dotenv -e .env -- node ./db/load-data.mjs",
+    "db:load-data": "dotenv -e .env -- node ./db/load-data.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,7 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@electric-sql/client": "1.0.0-beta.3",
+    "@electric-sql/pglite": "^0.2.16",
+    "@electric-sql/pglite-sync": "^0.2.18",
     "dotenv": "^16.4.7",
+    "fastify": "^5.2.1",
     "postgres": "^3.4.5",
     "redis": "^4.7.0",
     "sst": "^3.7.2",
@@ -25,8 +28,10 @@
     "@faker-js/faker": "^9.4.0",
     "@types/pg": "^8.11.11",
     "@types/uuid": "^10.0.0",
+    "@types/uuid-validate": "^0.0.3",
     "camelcase": "^8.0.0",
     "dotenv-cli": "^8.0.0",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "uuid-validate": "^0.0.3"
   }
 }

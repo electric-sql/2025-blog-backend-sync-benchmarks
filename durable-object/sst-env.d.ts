@@ -6,6 +6,15 @@
 import "sst"
 declare module "sst" {
   export interface Resource {
+    "ElectricUrl": {
+      "type": "sst.sst.Linkable"
+      "url": string
+    }
+    "FastifyApi": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
     "examples-infra-shared-examplesInfraVpcShared": {
       "type": "sst.aws.Vpc"
     }
